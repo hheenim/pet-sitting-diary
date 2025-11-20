@@ -631,7 +631,6 @@
           🐾 Pet Sitting Calendar
           <span class="pill">My bookings</span>
         </h1>
-        <p class="sub">一眼睇晒每日 booking 數；用表格新增 / 修改客人資料，完全唔駛開 code。</p>
       </div>
       <div class="top-controls">
         <div class="top-row">
@@ -641,7 +640,6 @@
             <input id="maxPerDayInput" type="number" min="1" max="12" />
           </div>
         </div>
-        <p class="sub" style="font-size:11px;">每日 booking 上限只係顏色提示，照樣可以 overbook（自己小心睇）。</p>
       </div>
     </header>
 
@@ -1047,7 +1045,6 @@
         detailsSubEl.textContent = "";
       }
 
-      // Day off button狀態
       toggleDayOffBtn.disabled = false;
       if (isOff) {
         toggleDayOffBtn.textContent = "Set as available";
@@ -1057,7 +1054,6 @@
         toggleDayOffBtn.classList.remove("btn-danger");
       }
 
-      // Add booking button
       addBookingBtn.disabled = isOff;
 
       bookingListEl.innerHTML = "";
@@ -1170,7 +1166,6 @@
     }
 
     addTimeBtn.addEventListener("click", () => {
-      // 之後加嘅 time 可以刪除
       createTimeRow("", true);
     });
 
@@ -1200,7 +1195,7 @@
       state.editingBookingId = booking.id;
       const [datePart, timePart] = booking.dateTime.split("T");
       dateInput.value = datePart;
-      repeatUntilInput.value = ""; // 編輯時唔搞 repeat，多日 booking 要另外處理
+      repeatUntilInput.value = "";
       clientInput.value = booking.clientName;
       petInput.value = booking.petName;
       addressInput.value = booking.address;
@@ -1208,7 +1203,7 @@
       durationInput.value = booking.duration || "";
       notesInput.value = booking.notes || "";
       resetTimeInputs(timePart.slice(0,5));
-      addTimeBtn.classList.add("hidden"); // 編輯只改單一時間
+      addTimeBtn.classList.add("hidden");
     }
 
     function hideForm() {
@@ -1244,14 +1239,12 @@
       }
 
       if (state.editingBookingId) {
-        // Edit：只會改一個 booking，用第一個時間
         const time = times[0];
         const dateTime = `${date}T${time}`;
         bookings = bookings.map(b =>
           b.id === state.editingBookingId ? { ...b, ...newData, dateTime } : b
         );
       } else {
-        // New：可以多日 + 多個時間
         let endDateStr = repeatUntilInput.value || date;
         const start = new Date(date + "T00:00");
         const end = new Date(endDateStr + "T00:00");
@@ -1263,7 +1256,6 @@
 
         for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
           const dStr = formatDateISO(d);
-          // Day off 日子唔自動加 booking
           if (settings.blockedDates.includes(dStr)) continue;
 
           times.forEach(t => {
@@ -1296,7 +1288,6 @@
       openFormForNew();
     });
 
-    // Top buttons
     document.getElementById("prevMonthBtn").addEventListener("click", () => {
       if (state.currentMonth === 0) {
         state.currentMonth = 11;
@@ -1374,7 +1365,6 @@
     }
 
     (function init() {
-      // 預設跳去 2025 年 12 月
       const now = new Date();
       if (now.getFullYear() === 2025 && now.getMonth() === 11) {
         state.currentYear = 2025;
