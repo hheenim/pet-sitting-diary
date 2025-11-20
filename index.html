@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pet Sitting Calendar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --border: #d8dde8;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --danger: #f97373;
+      --shadow-soft: 0 8px 20px rgba(15, 23, 42, 0.08);
+      --radius-lg: 16px;
+      --radius-md: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top left, #e0f2fe, #f5f7fb 40%, #eef2ff);
+      color: var(--text-main);
+      padding: 24px;
+    }
+
+    .app-shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: linear-gradient(135deg,#f9fafb,#eef2ff);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill {
+      font-size: 12px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .sub {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .top-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .top-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .settings-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.12);
+    }
+
+    .settings-inline label {
+      color: var(--text-muted);
+    }
+
+    .settings-inline input[type="number"] {
+      width: 52px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      font-size: 12px;
+      outline: none;
+      background: #ffffff;
+      text-align: center;
+    }
+
+    .settings-inline input[type="number"]:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.2);
+    }
+
+    .calendar-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.6fr);
+      gap: 20px;
+    }
+
+    .month-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+
+    .month-title {
+      font-weight: 600;
+      font-size: 18px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .month-title span {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .month-controls {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: #ffffff;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.15s, box-shadow 0.15s, transform 0.05s;
+    }
+
+    .btn:hover {
+      background: #f3f4ff;
+      box-shadow: 0 3px 6px rgba(15, 23, 42, 0.1);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    .btn-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.15s, transform 0.05s;
+    }
+
+    .btn-icon:hover {
+      background: #eef2ff;
+    }
+
+    .btn-icon:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      border-color: rgba(37, 99, 235, 0.6);
+      color: #1d4ed8;
+      background: #e0edff;
+      font-weight: 500;
+    }
+
+    .btn-primary:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-xs {
+      padding: 3px 8px;
+      font-size: 11px;
+    }
+
+    .btn-danger {
+      border-color: rgba(248, 113, 113, 0.7);
+      color: #b91c1c;
+      background: #fee2e2;
+    }
+
+    .calendar-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .weekday {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-align: center;
+      padding-bottom: 4px;
+    }
+
+    .day-cell {
+      aspect-ratio: 1 / 1;
+      position: relative;
+    }
+
+    .day-button {
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      padding: 6px;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: background 0.15s, box-shadow 0.15s, transform 0.05s, border-color 0.15s;
+      font-size: 13px;
+    }
+
+    .day-button:hover {
+      background: #eef2ff;
+      box-shadow: 0 3px 6px rgba(15, 23, 42, 0.1);
+    }
+
+    .day-number {
+      font-weight: 600;
+    }
+
+    .badge {
+      align-self: flex-start;
+      margin-top: 2px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .badge-green {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-orange {
+      background: #fed7aa;
+      color: #9a3412;
+    }
+
+    .badge-grey {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .day-button.available {
+      background: #ecfdf5;
+      border-color: rgba(22, 163, 74, 0.4);
+    }
+
+    .day-button.fully-booked {
+      background: #fffbeb;
+      border-color: rgba(245, 158, 11, 0.6);
+    }
+
+    .day-button.blocked {
+      background: #fee2e2;
+      border-color: rgba(239, 68, 68, 0.8);
+    }
+
+    .day-button.today {
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+    }
+
+    .dot-count {
+      position: absolute;
+      right: 6px;
+      bottom: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .empty-cell {
+      visibility: hidden;
+    }
+
+    .details-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 260px;
+    }
+
+    .details-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .details-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .details-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .details-count {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .details-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 4px;
+      align-items: center;
+    }
+
+    .details-actions-right {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .booking-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+      max-height: 260px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .booking-card {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      background: #f9fafb;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 4px 10px;
+      font-size: 13px;
+    }
+
+    .booking-time {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .badge-type {
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      align-self: flex-start;
+      justify-self: flex-end;
+    }
+
+    .booking-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .booking-client {
+      font-weight: 500;
+    }
+
+    .booking-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .booking-notes {
+      font-size: 12px;
+      margin-top: 4px;
+      color: #4b5563;
+    }
+
+    .booking-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .empty-message {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.12);
+    }
+
+    .legend-swatch {
+      width: 14px;
+      height: 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+    }
+
+    .swatch-available {
+      background: #ecfdf5;
+    }
+
+    .swatch-partial {
+      background: #fefce8;
+    }
+
+    .swatch-full {
+      background: #fffbeb;
+    }
+
+    .swatch-blocked {
+      background: #fee2e2;
+    }
+
+    .booking-form {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+      background: #f3f4ff;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .booking-form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .booking-form-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 10px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .form-field label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 6px 8px;
+      font-size: 13px;
+      outline: none;
+      background: #ffffff;
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.2);
+    }
+
+    .form-field textarea {
+      resize: vertical;
+      min-height: 50px;
+    }
+
+    .form-field.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .hint-text {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .time-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .time-row input[type="time"] {
+      flex: 1;
+    }
+
+    .time-remove-btn {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      font-size: 11px;
+      padding: 3px 6px;
+      cursor: pointer;
+    }
+
+    .time-remove-btn:hover {
+      background: #fee2e2;
+      border-color: #fecaca;
+    }
+
+    .time-actions {
+      margin-top: 4px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 800px) {
+      body {
+        padding: 12px;
+      }
+      .calendar-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .details-card {
+        min-height: 220px;
+      }
+      .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .top-controls {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div>
+        <h1>
+          🐾 Pet Sitting Calendar
+          <span class="pill">My bookings</span>
+        </h1>
+        <p class="sub">一眼睇晒每日 booking 數；用表格新增 / 修改客人資料，完全唔駛開 code。</p>
+      </div>
+      <div class="top-controls">
+        <div class="top-row">
+          <button class="btn" id="todayBtn">Today</button>
+          <div class="settings-inline">
+            <label for="maxPerDayInput">Daily limit</label>
+            <input id="maxPerDayInput" type="number" min="1" max="12" />
+          </div>
+        </div>
+        <p class="sub" style="font-size:11px;">每日 booking 上限只係顏色提示，照樣可以 overbook（自己小心睇）。</p>
+      </div>
+    </header>
+
+    <div class="calendar-layout">
+      <!-- Calendar -->
+      <section class="calendar-card">
+        <div class="month-header">
+          <div class="month-title" id="monthTitle">
+            December 2025
+            <span id="monthSummary"></span>
+          </div>
+          <div class="month-controls">
+            <button class="btn-icon" id="prevMonthBtn" aria-label="Previous month">‹</button>
+            <button class="btn-icon" id="nextMonthBtn" aria-label="Next month">›</button>
+          </div>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid"></div>
+
+        <div class="legend">
+          <div class="legend-item">
+            <span class="legend-swatch swatch-available"></span> Available / 0 bookings
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch swatch-partial"></span> 1–(limit-1) bookings
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch swatch-full"></span> Full (≥ daily limit)
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch swatch-blocked"></span> Day off
+          </div>
+        </div>
+      </section>
+
+      <!-- Day details + form -->
+      <section class="details-card">
+        <div class="details-header">
+          <div>
+            <div class="details-title" id="detailsTitle">Select a day</div>
+            <div class="details-sub" id="detailsSub">點擊左邊任何一日，睇番 booking list，然後可以設定 Day off / 新增 / 修改。</div>
+          </div>
+          <div class="details-count" id="detailsCount"></div>
+        </div>
+
+        <div class="details-actions">
+          <button class="btn btn-xs btn-danger" id="toggleDayOffBtn" disabled>Set day off</button>
+          <div class="details-actions-right">
+            <button class="btn btn-primary" id="addBookingBtn" disabled>＋ Add booking</button>
+          </div>
+        </div>
+
+        <div class="booking-list" id="bookingList">
+          <div class="empty-message">
+            未揀日子。請先喺左邊月曆揀一日。
+          </div>
+        </div>
+
+        <!-- Booking form -->
+        <form id="bookingForm" class="booking-form hidden">
+          <div class="booking-form-header">
+            <div class="booking-form-title" id="formTitle">Add booking</div>
+            <button type="button" class="btn btn-xs" id="closeFormBtn">Close</button>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="dateInput">Start date</label>
+              <input id="dateInput" name="date" type="date" required />
+            </div>
+            <div class="form-field">
+              <label for="repeatUntilInput">Repeat until (optional)</label>
+              <input id="repeatUntilInput" type="date" />
+              <div class="hint-text">留空 = 只此一天；設定重覆日子會連續幫你加。</div>
+            </div>
+
+            <div class="form-field full-width">
+              <label>Times</label>
+              <div id="timeInputs"></div>
+              <div class="time-actions">
+                <button type="button" class="btn btn-xs" id="addTimeBtn">＋ Add time</button>
+              </div>
+              <div class="hint-text">可以加多個時間，例如 09:00 ＋ 18:00，一次過幫你開早晚兩個 visit。</div>
+            </div>
+
+            <div class="form-field">
+              <label for="clientInput">Client name</label>
+              <input id="clientInput" name="client" type="text" required />
+            </div>
+            <div class="form-field">
+              <label for="petInput">Pet name</label>
+              <input id="petInput" name="pet" type="text" required />
+            </div>
+            <div class="form-field">
+              <label for="addressInput">Address / Area</label>
+              <input id="addressInput" name="address" type="text" required />
+            </div>
+            <div class="form-field">
+              <label for="serviceInput">Service type</label>
+              <select id="serviceInput" name="service">
+                <option value="Home visit">Home visit</option>
+                <option value="Overnight care">Overnight care</option>
+                <option value="Day care">Day care</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="durationInput">Duration</label>
+              <input id="durationInput" name="duration" type="text" placeholder="30 min / 45 min…" />
+            </div>
+            <div class="form-field">
+              <label for="notesInput">Notes (optional)</label>
+              <textarea id="notesInput" name="notes" rows="2"></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-xs" id="cancelEditBtn">Cancel</button>
+            <button type="submit" class="btn btn-xs btn-primary" id="saveBookingBtn">Save</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "pet_sitting_bookings_v1";
+    const SETTINGS_KEY = "pet_sitting_settings_v1";
+
+    const demoBookings = [
+      {
+        id: 1,
+        dateTime: "2025-12-06T09:00",
+        clientName: "Deborah",
+        petName: "Milo",
+        address: "Salford, M5",
+        serviceType: "Home visit",
+        duration: "30 min",
+        notes: "早上喂飯 + 清 litter"
+      },
+      {
+        id: 2,
+        dateTime: "2025-12-06T18:00",
+        clientName: "Deborah",
+        petName: "Milo",
+        address: "Salford, M5",
+        serviceType: "Home visit",
+        duration: "30 min",
+        notes: "晚餐 + 逗貓 15 分鐘"
+      },
+      {
+        id: 3,
+        dateTime: "2025-12-23T10:30",
+        clientName: "Tom",
+        petName: "Oreo",
+        address: "Salford Quays",
+        serviceType: "Home visit",
+        duration: "30 min",
+        notes: ""
+      },
+      {
+        id: 4,
+        dateTime: "2025-12-24T09:00",
+        clientName: "Anna",
+        petName: "Mochi",
+        address: "MediaCityUK",
+        serviceType: "Overnight care",
+        duration: "1 hr",
+        notes: "最後一晚"
+      }
+    ];
+
+    function loadBookings() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          return JSON.parse(stored);
+        } else {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(demoBookings));
+          return demoBookings.slice();
+        }
+      } catch (e) {
+        return demoBookings.slice();
+      }
+    }
+
+    function saveBookings() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
+      } catch (e) {}
+    }
+
+    function loadSettings() {
+      const defaults = { maxPerDay: 4, blockedDates: [] };
+      try {
+        const stored = localStorage.getItem(SETTINGS_KEY);
+        if (!stored) {
+          localStorage.setItem(SETTINGS_KEY, JSON.stringify(defaults));
+          return { ...defaults };
+        }
+        const parsed = JSON.parse(stored);
+        return {
+          maxPerDay: parsed.maxPerDay && parsed.maxPerDay > 0 ? parsed.maxPerDay : 4,
+          blockedDates: Array.isArray(parsed.blockedDates) ? parsed.blockedDates : []
+        };
+      } catch (e) {
+        return { ...defaults };
+      }
+    }
+
+    function saveSettings() {
+      try {
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+      } catch (e) {}
+    }
+
+    let bookings = loadBookings();
+    let nextId = bookings.reduce((max, b) => Math.max(max, b.id), 0) + 1;
+    let settings = loadSettings();
+
+    const state = {
+      currentYear: 2025,
+      currentMonth: 11, // 0 = Jan
+      selectedDate: null,
+      editingBookingId: null
+    };
+
+    const weekdayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+    function formatDateISO(date) {
+      return date.toISOString().split("T")[0];
+    }
+
+    function getBookingsForDate(dateStr) {
+      return bookings
+        .filter(b => b.dateTime.startsWith(dateStr))
+        .sort((a, b) => a.dateTime.localeCompare(b.dateTime));
+    }
+
+    function formatHumanDate(dateStr) {
+      const d = new Date(dateStr + "T00:00");
+      const options = { weekday: "short", day: "numeric", month: "short", year: "numeric" };
+      return d.toLocaleDateString(undefined, options);
+    }
+
+    function formatTime(dateTimeStr) {
+      const d = new Date(dateTimeStr);
+      return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    }
+
+    // DOM refs
+    const monthTitleEl = document.getElementById("monthTitle");
+    const monthSummaryEl = document.getElementById("monthSummary");
+    const calendarGridEl = document.getElementById("calendarGrid");
+
+    const detailsTitleEl = document.getElementById("detailsTitle");
+    const detailsSubEl = document.getElementById("detailsSub");
+    const detailsCountEl = document.getElementById("detailsCount");
+    const bookingListEl = document.getElementById("bookingList");
+    const addBookingBtn = document.getElementById("addBookingBtn");
+    const toggleDayOffBtn = document.getElementById("toggleDayOffBtn");
+
+    const bookingForm = document.getElementById("bookingForm");
+    const formTitleEl = document.getElementById("formTitle");
+    const dateInput = document.getElementById("dateInput");
+    const repeatUntilInput = document.getElementById("repeatUntilInput");
+    const clientInput = document.getElementById("clientInput");
+    const petInput = document.getElementById("petInput");
+    const addressInput = document.getElementById("addressInput");
+    const serviceInput = document.getElementById("serviceInput");
+    const durationInput = document.getElementById("durationInput");
+    const notesInput = document.getElementById("notesInput");
+    const closeFormBtn = document.getElementById("closeFormBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+
+    const timeInputsContainer = document.getElementById("timeInputs");
+    const addTimeBtn = document.getElementById("addTimeBtn");
+    const maxPerDayInput = document.getElementById("maxPerDayInput");
+
+    // Calendar rendering
+    function renderCalendar() {
+      const { currentYear, currentMonth } = state;
+      calendarGridEl.innerHTML = "";
+
+      weekdayNames.forEach(day => {
+        const div = document.createElement("div");
+        div.className = "weekday";
+        div.textContent = day;
+        calendarGridEl.appendChild(div);
+      });
+
+      const firstOfMonth = new Date(currentYear, currentMonth, 1);
+      const jsFirstDay = firstOfMonth.getDay();
+      const mondayIndex = (jsFirstDay + 6) % 7;
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+      const monthName = firstOfMonth.toLocaleString(undefined, { month: "long" });
+      monthTitleEl.childNodes[0].textContent = monthName + " " + currentYear;
+
+      const monthPrefix = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-`;
+      const monthBookings = bookings.filter(b => b.dateTime.startsWith(monthPrefix));
+      monthSummaryEl.textContent =
+        monthBookings.length > 0 ? `${monthBookings.length} bookings` : "No bookings yet";
+
+      for (let i = 0; i < mondayIndex; i++) {
+        const empty = document.createElement("div");
+        empty.className = "day-cell empty-cell";
+        calendarGridEl.appendChild(empty);
+      }
+
+      const today = new Date();
+      const todayStr = formatDateISO(today);
+      const maxPerDay = settings.maxPerDay || 4;
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateObj = new Date(currentYear, currentMonth, day);
+        const dateStr = formatDateISO(dateObj);
+        const dayBookings = getBookingsForDate(dateStr);
+        const count = dayBookings.length;
+        const isBlocked = settings.blockedDates.includes(dateStr);
+
+        const cell = document.createElement("div");
+        cell.className = "day-cell";
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "day-button";
+        button.dataset.date = dateStr;
+
+        if (isBlocked) {
+          button.classList.add("blocked");
+        } else if (count === 0) {
+          button.classList.add("available");
+        } else if (count >= maxPerDay) {
+          button.classList.add("fully-booked");
+        } else {
+          button.style.background = "#fefce8";
+        }
+
+        if (dateStr === todayStr) {
+          button.classList.add("today");
+        }
+
+        const numSpan = document.createElement("div");
+        numSpan.className = "day-number";
+        numSpan.textContent = day;
+
+        const badge = document.createElement("div");
+        if (isBlocked) {
+          badge.className = "badge badge-grey";
+          badge.innerHTML = `<span class="status-dot"></span> Off`;
+        } else if (count === 0) {
+          badge.className = "badge badge-green";
+          badge.innerHTML = `<span class="status-dot"></span> Free`;
+        } else if (count < maxPerDay) {
+          badge.className = "badge badge-orange";
+          badge.innerHTML = `<span class="status-dot"></span> x${count}`;
+        } else {
+          badge.className = "badge badge-orange";
+          badge.innerHTML = `<span class="status-dot"></span> Full (${count})`;
+        }
+
+        const countIndicator = document.createElement("div");
+        countIndicator.className = "dot-count";
+        if (count > 0) {
+          countIndicator.textContent = `${count}×`;
+        }
+
+        button.appendChild(numSpan);
+        button.appendChild(badge);
+        if (count > 0) button.appendChild(countIndicator);
+
+        button.addEventListener("click", () => {
+          state.selectedDate = dateStr;
+          renderDayDetails();
+          hideForm();
+        });
+
+        cell.appendChild(button);
+        calendarGridEl.appendChild(cell);
+      }
+    }
+
+    // Day details
+    function renderDayDetails() {
+      const dateStr = state.selectedDate;
+      if (!dateStr) return;
+
+      const dayBookings = getBookingsForDate(dateStr);
+      const isOff = settings.blockedDates.includes(dateStr);
+
+      detailsTitleEl.textContent = formatHumanDate(dateStr);
+
+      const count = dayBookings.length;
+      detailsCountEl.textContent =
+        count === 0 ? "0 booking" : count === 1 ? "1 booking" : `${count} bookings`;
+
+      if (isOff) {
+        detailsSubEl.textContent = "呢日設定為 Day off（休息日），建議唔好再加新 booking。";
+      } else if (count === 0) {
+        detailsSubEl.textContent = "呢日暫時冇 booking，可以用 Add booking 加新客。";
+      } else {
+        detailsSubEl.textContent = "";
+      }
+
+      // Day off button狀態
+      toggleDayOffBtn.disabled = false;
+      if (isOff) {
+        toggleDayOffBtn.textContent = "Set as available";
+        toggleDayOffBtn.classList.add("btn-danger");
+      } else {
+        toggleDayOffBtn.textContent = "Set this day OFF";
+        toggleDayOffBtn.classList.remove("btn-danger");
+      }
+
+      // Add booking button
+      addBookingBtn.disabled = isOff;
+
+      bookingListEl.innerHTML = "";
+
+      if (count === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-message";
+        empty.textContent = "今日暫時冇 booking。";
+        bookingListEl.appendChild(empty);
+        return;
+      }
+
+      dayBookings.forEach(b => {
+        const card = document.createElement("article");
+        card.className = "booking-card";
+
+        const time = document.createElement("div");
+        time.className = "booking-time";
+        time.textContent = formatTime(b.dateTime);
+
+        const typeBadge = document.createElement("div");
+        typeBadge.className = "badge-type";
+        typeBadge.textContent = b.serviceType || "Pet sitting";
+
+        const main = document.createElement("div");
+        main.className = "booking-main";
+
+        const client = document.createElement("div");
+        client.className = "booking-client";
+        client.textContent = `${b.clientName} · ${b.petName}`;
+
+        const meta = document.createElement("div");
+        meta.className = "booking-meta";
+        meta.textContent = `${b.address} · ${b.duration || "Duration TBC"}`;
+
+        const notes = document.createElement("div");
+        notes.className = "booking-notes";
+        if (b.notes) {
+          notes.textContent = b.notes;
+        }
+
+        const actions = document.createElement("div");
+        actions.className = "booking-actions";
+
+        const editBtn = document.createElement("button");
+        editBtn.type = "button";
+        editBtn.className = "btn btn-xs";
+        editBtn.textContent = "Edit";
+        editBtn.addEventListener("click", () => {
+          openFormForEdit(b);
+        });
+
+        const delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.className = "btn btn-xs btn-danger";
+        delBtn.textContent = "Delete";
+        delBtn.addEventListener("click", () => {
+          bookings = bookings.filter(x => x.id !== b.id);
+          saveBookings();
+          renderCalendar();
+          renderDayDetails();
+          hideForm();
+          alert("已刪除呢個 booking。");
+        });
+
+        actions.appendChild(editBtn);
+        actions.appendChild(delBtn);
+
+        main.appendChild(client);
+        main.appendChild(meta);
+        if (b.notes) main.appendChild(notes);
+
+        card.appendChild(time);
+        card.appendChild(typeBadge);
+        card.appendChild(main);
+        card.appendChild(actions);
+
+        bookingListEl.appendChild(card);
+      });
+    }
+
+    // Time inputs handling
+    function createTimeRow(value = "", canRemove = false) {
+      const row = document.createElement("div");
+      row.className = "time-row";
+
+      const input = document.createElement("input");
+      input.type = "time";
+      input.className = "time-input";
+      if (value) input.value = value;
+      row.appendChild(input);
+
+      if (canRemove) {
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "time-remove-btn";
+        removeBtn.textContent = "–";
+        removeBtn.addEventListener("click", () => {
+          timeInputsContainer.removeChild(row);
+        });
+        row.appendChild(removeBtn);
+      }
+
+      timeInputsContainer.appendChild(row);
+    }
+
+    function resetTimeInputs(defaultTime) {
+      timeInputsContainer.innerHTML = "";
+      createTimeRow(defaultTime || "", false);
+    }
+
+    addTimeBtn.addEventListener("click", () => {
+      // 之後加嘅 time 可以刪除
+      createTimeRow("", true);
+    });
+
+    // Form handling
+    function openFormForNew() {
+      if (!state.selectedDate) return;
+      bookingForm.classList.remove("hidden");
+      formTitleEl.textContent = "Add booking";
+
+      state.editingBookingId = null;
+      dateInput.value = state.selectedDate;
+      repeatUntilInput.value = "";
+      clientInput.value = "";
+      petInput.value = "";
+      addressInput.value = "";
+      serviceInput.value = "Home visit";
+      durationInput.value = "";
+      notesInput.value = "";
+      resetTimeInputs("09:00");
+      addTimeBtn.classList.remove("hidden");
+    }
+
+    function openFormForEdit(booking) {
+      bookingForm.classList.remove("hidden");
+      formTitleEl.textContent = "Edit booking";
+
+      state.editingBookingId = booking.id;
+      const [datePart, timePart] = booking.dateTime.split("T");
+      dateInput.value = datePart;
+      repeatUntilInput.value = ""; // 編輯時唔搞 repeat，多日 booking 要另外處理
+      clientInput.value = booking.clientName;
+      petInput.value = booking.petName;
+      addressInput.value = booking.address;
+      serviceInput.value = booking.serviceType || "Home visit";
+      durationInput.value = booking.duration || "";
+      notesInput.value = booking.notes || "";
+      resetTimeInputs(timePart.slice(0,5));
+      addTimeBtn.classList.add("hidden"); // 編輯只改單一時間
+    }
+
+    function hideForm() {
+      bookingForm.classList.add("hidden");
+      state.editingBookingId = null;
+    }
+
+    bookingForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const date = dateInput.value;
+      if (!date) return;
+
+      const timeInputs = Array.from(timeInputsContainer.querySelectorAll(".time-input"));
+      const times = timeInputs.map(input => input.value).filter(Boolean);
+
+      if (times.length === 0) {
+        alert("至少要填一個時間。");
+        return;
+      }
+
+      const newData = {
+        clientName: clientInput.value.trim(),
+        petName: petInput.value.trim(),
+        address: addressInput.value.trim(),
+        serviceType: serviceInput.value,
+        duration: durationInput.value.trim(),
+        notes: notesInput.value.trim()
+      };
+
+      if (!newData.clientName || !newData.petName || !newData.address) {
+        alert("Client / Pet / Address 係必填呀。");
+        return;
+      }
+
+      if (state.editingBookingId) {
+        // Edit：只會改一個 booking，用第一個時間
+        const time = times[0];
+        const dateTime = `${date}T${time}`;
+        bookings = bookings.map(b =>
+          b.id === state.editingBookingId ? { ...b, ...newData, dateTime } : b
+        );
+      } else {
+        // New：可以多日 + 多個時間
+        let endDateStr = repeatUntilInput.value || date;
+        const start = new Date(date + "T00:00");
+        const end = new Date(endDateStr + "T00:00");
+
+        if (end < start) {
+          alert("Repeat until 唔可以早於開始日期。");
+          return;
+        }
+
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+          const dStr = formatDateISO(d);
+          // Day off 日子唔自動加 booking
+          if (settings.blockedDates.includes(dStr)) continue;
+
+          times.forEach(t => {
+            const dateTime = `${dStr}T${t}`;
+            bookings.push({
+              id: nextId++,
+              dateTime,
+              ...newData
+            });
+          });
+        }
+      }
+
+      saveBookings();
+      state.selectedDate = date;
+      hideForm();
+      renderCalendar();
+      renderDayDetails();
+    });
+
+    closeFormBtn.addEventListener("click", hideForm);
+    cancelEditBtn.addEventListener("click", hideForm);
+
+    addBookingBtn.addEventListener("click", () => {
+      if (!state.selectedDate) return;
+      if (settings.blockedDates.includes(state.selectedDate)) {
+        alert("呢日係 Day off，如要加 booking，請先取消 Day off。");
+        return;
+      }
+      openFormForNew();
+    });
+
+    // Top buttons
+    document.getElementById("prevMonthBtn").addEventListener("click", () => {
+      if (state.currentMonth === 0) {
+        state.currentMonth = 11;
+        state.currentYear -= 1;
+      } else {
+        state.currentMonth -= 1;
+      }
+      state.selectedDate = null;
+      renderCalendar();
+      resetDetailsPanel();
+      hideForm();
+    });
+
+    document.getElementById("nextMonthBtn").addEventListener("click", () => {
+      if (state.currentMonth === 11) {
+        state.currentMonth = 0;
+        state.currentYear += 1;
+      } else {
+        state.currentMonth += 1;
+      }
+      state.selectedDate = null;
+      renderCalendar();
+      resetDetailsPanel();
+      hideForm();
+    });
+
+    document.getElementById("todayBtn").addEventListener("click", () => {
+      const now = new Date();
+      state.currentYear = now.getFullYear();
+      state.currentMonth = now.getMonth();
+      state.selectedDate = formatDateISO(now);
+      renderCalendar();
+      renderDayDetails();
+      hideForm();
+    });
+
+    // Day off toggle
+    toggleDayOffBtn.addEventListener("click", () => {
+      if (!state.selectedDate) return;
+      const dateStr = state.selectedDate;
+      const idx = settings.blockedDates.indexOf(dateStr);
+      if (idx === -1) {
+        settings.blockedDates.push(dateStr);
+      } else {
+        settings.blockedDates.splice(idx, 1);
+      }
+      saveSettings();
+      renderCalendar();
+      renderDayDetails();
+    });
+
+    // Daily limit setting
+    maxPerDayInput.addEventListener("change", (e) => {
+      let val = parseInt(e.target.value, 10);
+      if (!val || val < 1) val = 1;
+      settings.maxPerDay = val;
+      maxPerDayInput.value = val;
+      saveSettings();
+      renderCalendar();
+      if (state.selectedDate) renderDayDetails();
+    });
+
+    function resetDetailsPanel() {
+      detailsTitleEl.textContent = "Select a day";
+      detailsSubEl.textContent = "點擊左邊任何一日，睇番 booking list，然後可以設定 Day off / 新增 / 修改。";
+      detailsCountEl.textContent = "";
+      bookingListEl.innerHTML = `
+        <div class="empty-message">
+          未揀日子。請先喺左邊月曆揀一日。
+        </div>`;
+      toggleDayOffBtn.disabled = true;
+      toggleDayOffBtn.textContent = "Set day off";
+      toggleDayOffBtn.classList.remove("btn-danger");
+      addBookingBtn.disabled = true;
+    }
+
+    (function init() {
+      // 預設跳去 2025 年 12 月
+      const now = new Date();
+      if (now.getFullYear() === 2025 && now.getMonth() === 11) {
+        state.currentYear = 2025;
+        state.currentMonth = 11;
+      } else {
+        state.currentYear = 2025;
+        state.currentMonth = 11;
+      }
+
+      maxPerDayInput.value = settings.maxPerDay || 4;
+
+      renderCalendar();
+      resetDetailsPanel();
+    })();
+  </script>
+</body>
+</html>
