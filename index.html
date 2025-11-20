@@ -680,7 +680,7 @@
         <div class="details-header">
           <div>
             <div class="details-title" id="detailsTitle">Select a day</div>
-            <div class="details-sub" id="detailsSub">點擊左邊任何一日，睇番 booking list，然後可以設定 Day off / 新增 / 修改。</div>
+            <div class="details-sub" id="detailsSub">點擊任何一日，睇番 booking list，然後可以設定 Day off / 新增 / 修改。</div>
           </div>
           <div class="details-count" id="detailsCount"></div>
         </div>
@@ -694,7 +694,7 @@
 
         <div class="booking-list" id="bookingList">
           <div class="empty-message">
-            未揀日子。請先喺左邊月曆揀一日。
+            未揀日子。請先喺月曆揀一日。
           </div>
         </div>
 
@@ -1352,11 +1352,11 @@
 
     function resetDetailsPanel() {
       detailsTitleEl.textContent = "Select a day";
-      detailsSubEl.textContent = "點擊左邊任何一日，睇番 booking list，然後可以設定 Day off / 新增 / 修改。";
+      detailsSubEl.textContent = "點擊任何一日，睇番 booking list，然後可以設定 Day off / 新增 / 修改。";
       detailsCountEl.textContent = "";
       bookingListEl.innerHTML = `
         <div class="empty-message">
-          未揀日子。請先喺左邊月曆揀一日。
+          未揀日子。請先喺月曆揀一日。
         </div>`;
       toggleDayOffBtn.disabled = true;
       toggleDayOffBtn.textContent = "Set day off";
