@@ -27,7 +27,7 @@
       min-height: 100vh;
       background: radial-gradient(circle at top left, #e0f2fe, #f5f7fb 40%, #eef2ff);
       color: var(--text-main);
-      padding: 16px;
+      padding: 24px;
     }
 
     .app-shell {
@@ -35,7 +35,7 @@
       margin: 0 auto;
       background: linear-gradient(135deg,#f9fafb,#eef2ff);
       border-radius: 24px;
-      padding: 16px 18px 20px;
+      padding: 24px;
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.25);
     }
@@ -44,8 +44,8 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 8px;
-      margin-bottom: 12px;
+      gap: 12px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
     }
 
@@ -60,23 +60,29 @@
     }
 
     .pill {
-      font-size: 10px;
-      padding: 2px 7px;
+      font-size: 12px;
+      padding: 3px 9px;
       border-radius: 999px;
       background: #e0f2fe;
       color: #0369a1;
+    }
+
+    .sub {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-muted);
     }
 
     .top-controls {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 4px;
+      gap: 6px;
     }
 
     .top-row {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       align-items: center;
       justify-content: flex-end;
       flex-wrap: wrap;
@@ -85,9 +91,9 @@
     .settings-inline {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      padding: 3px 7px;
+      gap: 6px;
+      font-size: 12px;
+      padding: 4px 8px;
       border-radius: 999px;
       background: rgba(148, 163, 184, 0.12);
     }
@@ -97,11 +103,11 @@
     }
 
     .settings-inline input[type="number"] {
-      width: 46px;
+      width: 52px;
       border-radius: 999px;
       border: 1px solid var(--border);
-      padding: 2px 5px;
-      font-size: 11px;
+      padding: 2px 6px;
+      font-size: 12px;
       outline: none;
       background: #ffffff;
       text-align: center;
@@ -115,33 +121,33 @@
     .calendar-layout {
       display: grid;
       grid-template-columns: minmax(0, 2fr) minmax(0, 1.6fr);
-      gap: 14px;
+      gap: 20px;
     }
 
     .month-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
       gap: 8px;
     }
 
     .month-title {
       font-weight: 600;
-      font-size: 16px;
+      font-size: 18px;
       display: flex;
       align-items: baseline;
       gap: 6px;
     }
 
     .month-title span {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-muted);
     }
 
     .month-controls {
       display: flex;
-      gap: 4px;
+      gap: 6px;
       align-items: center;
     }
 
@@ -149,8 +155,8 @@
       border: 1px solid var(--border);
       background: #ffffff;
       border-radius: 999px;
-      padding: 5px 9px;
-      font-size: 11px;
+      padding: 6px 10px;
+      font-size: 12px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -160,7 +166,7 @@
 
     .btn:hover {
       background: #f3f4ff;
-      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
+      box-shadow: 0 3px 6px rgba(15, 23, 42, 0.1);
     }
 
     .btn:active {
@@ -169,8 +175,8 @@
     }
 
     .btn-icon {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border-radius: 999px;
       display: inline-flex;
       align-items: center;
@@ -178,7 +184,7 @@
       border: 1px solid var(--border);
       background: #ffffff;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
       transition: background 0.15s, transform 0.05s;
     }
 
@@ -217,7 +223,7 @@
     .calendar-card {
       background: var(--card);
       border-radius: var(--radius-lg);
-      padding: 12px;
+      padding: 16px;
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.25);
     }
@@ -225,16 +231,16 @@
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 4px;
+      gap: 6px;
     }
 
     .weekday {
-      font-size: 10px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-muted);
       text-align: center;
-      padding-bottom: 2px;
+      padding-bottom: 4px;
     }
 
     .day-cell {
@@ -245,27 +251,60 @@
     .day-button {
       width: 100%;
       height: 100%;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid var(--border);
       background: #f9fafb;
-      padding: 5px;
+      padding: 6px;
       cursor: pointer;
       text-align: left;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: space-between;
       transition: background 0.15s, box-shadow 0.15s, transform 0.05s, border-color 0.15s;
-      font-size: 12px;
+      font-size: 13px;
     }
 
     .day-button:hover {
       background: #eef2ff;
-      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
+      box-shadow: 0 3px 6px rgba(15, 23, 42, 0.1);
     }
 
     .day-number {
       font-weight: 600;
-      font-size: 13px;
+    }
+
+    .badge {
+      align-self: flex-start;
+      margin-top: 2px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .badge-green {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-orange {
+      background: #fed7aa;
+      color: #9a3412;
+    }
+
+    .badge-grey {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: currentColor;
     }
 
     .day-button.available {
@@ -273,14 +312,9 @@
       border-color: rgba(22, 163, 74, 0.4);
     }
 
-    .day-button.partial {
-      background: #fefce8;
-      border-color: rgba(234, 179, 8, 0.4);
-    }
-
     .day-button.fully-booked {
       background: #fffbeb;
-      border-color: rgba(245, 158, 11, 0.8);
+      border-color: rgba(245, 158, 11, 0.6);
     }
 
     .day-button.blocked {
@@ -289,14 +323,15 @@
     }
 
     .day-button.today {
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
     }
 
-    .off-label {
-      margin-top: auto;
+    .dot-count {
+      position: absolute;
+      right: 4px;
+      bottom: 3px;
       font-size: 10px;
-      font-weight: 500;
-      color: #b91c1c;
+      color: var(--text-muted);
     }
 
     .empty-cell {
@@ -306,13 +341,13 @@
     .details-card {
       background: var(--card);
       border-radius: var(--radius-lg);
-      padding: 12px;
+      padding: 16px;
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.25);
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      min-height: 240px;
+      gap: 10px;
+      min-height: 260px;
     }
 
     .details-header {
@@ -323,59 +358,64 @@
     }
 
     .details-title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 600;
     }
 
+    .details-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
     .details-count {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-muted);
     }
 
     .details-actions {
       display: flex;
       justify-content: space-between;
-      gap: 6px;
-      margin-top: 2px;
+      gap: 8px;
+      margin-top: 4px;
       align-items: center;
     }
 
     .details-actions-right {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       justify-content: flex-end;
     }
 
     .booking-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
       margin-top: 4px;
-      max-height: 220px;
+      max-height: 260px;
       overflow-y: auto;
-      padding-right: 2px;
+      padding-right: 4px;
     }
 
     .booking-card {
       border-radius: var(--radius-md);
       border: 1px solid var(--border);
-      padding: 7px 8px;
+      padding: 8px 10px;
       background: #f9fafb;
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 4px 8px;
-      font-size: 12px;
+      gap: 4px 10px;
+      font-size: 13px;
     }
 
     .booking-time {
       font-weight: 600;
-      font-size: 12px;
+      font-size: 13px;
     }
 
     .badge-type {
       padding: 2px 6px;
       border-radius: 999px;
-      font-size: 10px;
+      font-size: 11px;
       background: #dbeafe;
       color: #1d4ed8;
       align-self: flex-start;
@@ -393,13 +433,13 @@
     }
 
     .booking-meta {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-muted);
     }
 
     .booking-notes {
-      font-size: 11px;
-      margin-top: 3px;
+      font-size: 12px;
+      margin-top: 4px;
       color: #4b5563;
     }
 
@@ -407,25 +447,66 @@
       grid-column: 1 / -1;
       display: flex;
       justify-content: flex-end;
-      gap: 4px;
-      margin-top: 2px;
+      gap: 6px;
+      margin-top: 4px;
     }
 
     .empty-message {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text-muted);
     }
 
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.12);
+    }
+
+    .legend-swatch {
+      width: 14px;
+      height: 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+    }
+
+    .swatch-available {
+      background: #ecfdf5;
+    }
+
+    .swatch-partial {
+      background: #fefce8;
+    }
+
+    .swatch-full {
+      background: #fffbeb;
+    }
+
+    .swatch-blocked {
+      background: #fee2e2;
+    }
+
     .booking-form {
-      margin-top: 6px;
-      padding: 8px;
+      margin-top: 10px;
+      padding: 10px;
       border-radius: 12px;
       border: 1px dashed var(--border);
       background: #f3f4ff;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      font-size: 12px;
+      gap: 8px;
+      font-size: 13px;
     }
 
     .booking-form-header {
@@ -437,33 +518,33 @@
 
     .booking-form-title {
       font-weight: 600;
-      font-size: 13px;
+      font-size: 14px;
     }
 
     .form-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 6px 8px;
+      gap: 8px 10px;
     }
 
     .form-field {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 3px;
     }
 
     .form-field label {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-muted);
     }
 
     .form-field input,
     .form-field select,
     .form-field textarea {
-      border-radius: 7px;
+      border-radius: 8px;
       border: 1px solid var(--border);
-      padding: 5px 7px;
-      font-size: 12px;
+      padding: 6px 8px;
+      font-size: 13px;
       outline: none;
       background: #ffffff;
     }
@@ -477,18 +558,23 @@
 
     .form-field textarea {
       resize: vertical;
-      min-height: 44px;
+      min-height: 50px;
     }
 
     .form-field.full-width {
       grid-column: 1 / -1;
     }
 
+    .hint-text {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
     .time-row {
       display: flex;
       align-items: center;
-      gap: 4px;
-      margin-bottom: 3px;
+      gap: 6px;
+      margin-bottom: 4px;
     }
 
     .time-row input[type="time"] {
@@ -500,7 +586,7 @@
       border: 1px solid var(--border);
       background: #ffffff;
       font-size: 11px;
-      padding: 2px 5px;
+      padding: 3px 6px;
       cursor: pointer;
     }
 
@@ -510,16 +596,9 @@
     }
 
     .time-actions {
-      margin-top: 2px;
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 6px;
       margin-top: 4px;
+      display: flex;
+      justify-content: flex-end;
     }
 
     .hidden {
@@ -528,28 +607,19 @@
 
     @media (max-width: 800px) {
       body {
-        padding: 10px;
+        padding: 12px;
       }
       .calendar-layout {
         grid-template-columns: minmax(0, 1fr);
       }
       .details-card {
-        min-height: 210px;
+        min-height: 220px;
       }
       .form-grid {
         grid-template-columns: minmax(0, 1fr);
       }
       .top-controls {
         align-items: flex-start;
-      }
-    }
-
-    @media (max-width: 430px) {
-      header {
-        margin-bottom: 8px;
-      }
-      header h1 {
-        font-size: 18px;
       }
     }
   </style>
@@ -589,25 +659,43 @@
         </div>
 
         <div class="calendar-grid" id="calendarGrid"></div>
+
+        <div class="legend">
+          <div class="legend-item">
+            <span class="legend-swatch swatch-available"></span> Available / 0 bookings
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch swatch-partial"></span> 1–(limit-1) bookings
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch swatch-full"></span> Full (≥ daily limit)
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch swatch-blocked"></span> Day off
+          </div>
+        </div>
       </section>
 
       <!-- Day details + form -->
       <section class="details-card">
         <div class="details-header">
-          <div class="details-title" id="detailsTitle">Select a day</div>
+          <div>
+            <div class="details-title" id="detailsTitle">Select a day</div>
+            <div class="details-sub" id="detailsSub">點擊左邊任何一日，睇番 booking list，然後可以設定 Day off / 新增 / 修改。</div>
+          </div>
           <div class="details-count" id="detailsCount"></div>
         </div>
 
         <div class="details-actions">
           <button class="btn btn-xs btn-danger" id="toggleDayOffBtn" disabled>Set day off</button>
           <div class="details-actions-right">
-            <button class="btn btn-primary btn-xs" id="addBookingBtn" disabled>＋ Add booking</button>
+            <button class="btn btn-primary" id="addBookingBtn" disabled>＋ Add booking</button>
           </div>
         </div>
 
         <div class="booking-list" id="bookingList">
           <div class="empty-message">
-            No day selected.
+            未揀日子。請先喺左邊月曆揀一日。
           </div>
         </div>
 
@@ -624,8 +712,9 @@
               <input id="dateInput" name="date" type="date" required />
             </div>
             <div class="form-field">
-              <label for="repeatUntilInput">Repeat until</label>
+              <label for="repeatUntilInput">Repeat until (optional)</label>
               <input id="repeatUntilInput" type="date" />
+              <div class="hint-text">留空 = 只此一天；設定重覆日子會連續幫你加。</div>
             </div>
 
             <div class="form-field full-width">
@@ -634,14 +723,15 @@
               <div class="time-actions">
                 <button type="button" class="btn btn-xs" id="addTimeBtn">＋ Add time</button>
               </div>
+              <div class="hint-text">可以加多個時間，例如 09:00 ＋ 18:00，一次過幫你開早晚兩個 visit。</div>
             </div>
 
             <div class="form-field">
-              <label for="clientInput">Client</label>
+              <label for="clientInput">Client name</label>
               <input id="clientInput" name="client" type="text" required />
             </div>
             <div class="form-field">
-              <label for="petInput">Pet</label>
+              <label for="petInput">Pet name</label>
               <input id="petInput" name="pet" type="text" required />
             </div>
             <div class="form-field">
@@ -649,7 +739,7 @@
               <input id="addressInput" name="address" type="text" required />
             </div>
             <div class="form-field">
-              <label for="serviceInput">Service</label>
+              <label for="serviceInput">Service type</label>
               <select id="serviceInput" name="service">
                 <option value="Home visit">Home visit</option>
                 <option value="Overnight care">Overnight care</option>
@@ -659,10 +749,10 @@
             </div>
             <div class="form-field">
               <label for="durationInput">Duration</label>
-              <input id="durationInput" name="duration" type="text" placeholder="" />
+              <input id="durationInput" name="duration" type="text" placeholder="30 min / 45 min…" />
             </div>
             <div class="form-field">
-              <label for="notesInput">Notes</label>
+              <label for="notesInput">Notes (optional)</label>
               <textarea id="notesInput" name="notes" rows="2"></textarea>
             </div>
           </div>
@@ -807,6 +897,7 @@
     const calendarGridEl = document.getElementById("calendarGrid");
 
     const detailsTitleEl = document.getElementById("detailsTitle");
+    const detailsSubEl = document.getElementById("detailsSub");
     const detailsCountEl = document.getElementById("detailsCount");
     const bookingListEl = document.getElementById("bookingList");
     const addBookingBtn = document.getElementById("addBookingBtn");
@@ -852,7 +943,7 @@
       const monthPrefix = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-`;
       const monthBookings = bookings.filter(b => b.dateTime.startsWith(monthPrefix));
       monthSummaryEl.textContent =
-        monthBookings.length > 0 ? `${monthBookings.length}` : "";
+        monthBookings.length > 0 ? `${monthBookings.length} bookings` : "No bookings yet";
 
       for (let i = 0; i < mondayIndex; i++) {
         const empty = document.createElement("div");
@@ -886,7 +977,7 @@
         } else if (count >= maxPerDay) {
           button.classList.add("fully-booked");
         } else {
-          button.classList.add("partial");
+          button.style.background = "#fefce8";
         }
 
         if (dateStr === todayStr) {
@@ -898,11 +989,11 @@
         numSpan.textContent = day;
         button.appendChild(numSpan);
 
-        if (isBlocked) {
-          const off = document.createElement("div");
-          off.className = "off-label";
-          off.textContent = "OFF";
-          button.appendChild(off);
+        if (count > 0 && !isBlocked) {
+          const countIndicator = document.createElement("div");
+          countIndicator.className = "dot-count";
+          countIndicator.textContent = String(count);
+          button.appendChild(countIndicator);
         }
 
         button.addEventListener("click", () => {
@@ -928,8 +1019,17 @@
 
       const count = dayBookings.length;
       detailsCountEl.textContent =
-        count === 0 ? "0" : count === 1 ? "1" : `${count}`;
+        count === 0 ? "0 booking" : count === 1 ? "1 booking" : `${count} bookings`;
 
+      if (isOff) {
+        detailsSubEl.textContent = "呢日設定為 Day off（休息日），建議唔好再加新 booking。";
+      } else if (count === 0) {
+        detailsSubEl.textContent = "呢日暫時冇 booking，可以用 Add booking 加新客。";
+      } else {
+        detailsSubEl.textContent = "";
+      }
+
+      // Day off button狀態
       toggleDayOffBtn.disabled = false;
       if (isOff) {
         toggleDayOffBtn.textContent = "Set as available";
@@ -939,6 +1039,7 @@
         toggleDayOffBtn.classList.remove("btn-danger");
       }
 
+      // Add booking button
       addBookingBtn.disabled = isOff;
 
       bookingListEl.innerHTML = "";
@@ -946,7 +1047,7 @@
       if (count === 0) {
         const empty = document.createElement("div");
         empty.className = "empty-message";
-        empty.textContent = "No booking.";
+        empty.textContent = "今日暫時冇 booking。";
         bookingListEl.appendChild(empty);
         return;
       }
@@ -972,7 +1073,7 @@
 
         const meta = document.createElement("div");
         meta.className = "booking-meta";
-        meta.textContent = `${b.address} · ${b.duration || ""}`.trim();
+        meta.textContent = `${b.address} · ${b.duration || "Duration TBC"}`;
 
         const notes = document.createElement("div");
         notes.className = "booking-notes";
@@ -1001,7 +1102,7 @@
           renderCalendar();
           renderDayDetails();
           hideForm();
-          alert("Deleted.");
+          alert("已刪除呢個 booking。");
         });
 
         actions.appendChild(editBtn);
@@ -1051,6 +1152,7 @@
     }
 
     addTimeBtn.addEventListener("click", () => {
+      // 之後加嘅 time 可以刪除
       createTimeRow("", true);
     });
 
@@ -1062,7 +1164,7 @@
 
       state.editingBookingId = null;
       dateInput.value = state.selectedDate;
-      repeatUntilInput.value = state.selectedDate; // default same as start date
+      repeatUntilInput.value = state.selectedDate;
       clientInput.value = "";
       petInput.value = "";
       addressInput.value = "";
@@ -1080,7 +1182,7 @@
       state.editingBookingId = booking.id;
       const [datePart, timePart] = booking.dateTime.split("T");
       dateInput.value = datePart;
-      repeatUntilInput.value = "";
+      repeatUntilInput.value = ""; // 編輯時唔搞 repeat，多日 booking 要另外處理
       clientInput.value = booking.clientName;
       petInput.value = booking.petName;
       addressInput.value = booking.address;
@@ -1088,7 +1190,7 @@
       durationInput.value = booking.duration || "";
       notesInput.value = booking.notes || "";
       resetTimeInputs(timePart.slice(0,5));
-      addTimeBtn.classList.add("hidden");
+      addTimeBtn.classList.add("hidden"); // 編輯只改單一時間
     }
 
     function hideForm() {
@@ -1105,7 +1207,7 @@
       const times = timeInputs.map(input => input.value).filter(Boolean);
 
       if (times.length === 0) {
-        alert("At least one time is required.");
+        alert("至少要填一個時間。");
         return;
       }
 
@@ -1119,28 +1221,31 @@
       };
 
       if (!newData.clientName || !newData.petName || !newData.address) {
-        alert("Client / Pet / Address are required.");
+        alert("Client / Pet / Address 係必填呀。");
         return;
       }
 
       if (state.editingBookingId) {
+        // Edit：只會改一個 booking，用第一個時間
         const time = times[0];
         const dateTime = `${date}T${time}`;
         bookings = bookings.map(b =>
           b.id === state.editingBookingId ? { ...b, ...newData, dateTime } : b
         );
       } else {
+        // New：可以多日 + 多個時間
         let endDateStr = repeatUntilInput.value || date;
         const start = new Date(date + "T00:00");
         const end = new Date(endDateStr + "T00:00");
 
         if (end < start) {
-          alert("Repeat until cannot be earlier than start date.");
+          alert("Repeat until 唔可以早於開始日期。");
           return;
         }
 
         for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
           const dStr = formatDateISO(d);
+          // Day off 日子唔自動加 booking
           if (settings.blockedDates.includes(dStr)) continue;
 
           times.forEach(t => {
@@ -1167,12 +1272,13 @@
     addBookingBtn.addEventListener("click", () => {
       if (!state.selectedDate) return;
       if (settings.blockedDates.includes(state.selectedDate)) {
-        alert("This day is OFF. Set as available before adding bookings.");
+        alert("呢日係 Day off，如要加 booking，請先取消 Day off。");
         return;
       }
       openFormForNew();
     });
 
+    // Top buttons
     document.getElementById("prevMonthBtn").addEventListener("click", () => {
       if (state.currentMonth === 0) {
         state.currentMonth = 11;
@@ -1237,10 +1343,11 @@
 
     function resetDetailsPanel() {
       detailsTitleEl.textContent = "Select a day";
+      detailsSubEl.textContent = "點擊左邊任何一日，睇番 booking list，然後可以設定 Day off / 新增 / 修改。";
       detailsCountEl.textContent = "";
       bookingListEl.innerHTML = `
         <div class="empty-message">
-          No day selected.
+          未揀日子。請先喺左邊月曆揀一日。
         </div>`;
       toggleDayOffBtn.disabled = true;
       toggleDayOffBtn.textContent = "Set day off";
@@ -1249,6 +1356,7 @@
     }
 
     (function init() {
+      // 預設跳去 2025 年 12 月
       const now = new Date();
       if (now.getFullYear() === 2025 && now.getMonth() === 11) {
         state.currentYear = 2025;
