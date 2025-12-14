@@ -623,10 +623,56 @@
       }
     }
   
-    /* Hide legend row and details explanatory text */
-    .legend,
-    .details-sub {
-      display: none;
+    /* Tomorrow widget */
+    .tomorrow-card {
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 12px;
+      padding: 10px;
+      background: #ffffff;
+    }
+    .tomorrow-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .tomorrow-title {
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .tomorrow-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .tomorrow-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+    .tomorrow-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 10px;
+      background: #f9fafb;
+      border: 1px solid rgba(216, 221, 232, 0.8);
+    }
+    .tomorrow-item b {
+      font-weight: 600;
+    }
+    .tomorrow-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 8px;
+      gap: 6px;
     }
 
   </style>
@@ -698,6 +744,17 @@
           <div class="details-actions-right">
             <button class="btn btn-primary" id="addBookingBtn" disabled>＋ Add booking</button>
           </div>
+        <div class="tomorrow-card" id="tomorrowCard">
+          <div class="tomorrow-head">
+            <div class="tomorrow-title" id="tomorrowTitle">Tomorrow</div>
+            <div class="tomorrow-sub" id="tomorrowCount"></div>
+          </div>
+          <ul class="tomorrow-list" id="tomorrowList"></ul>
+          <div class="tomorrow-actions">
+            <button class="btn btn-xs" id="downloadTomorrowIcsBtn" type="button">Download .ics</button>
+          </div>
+        </div>
+
         </div>
 
         <div class="booking-list" id="bookingList">
@@ -927,6 +984,131 @@
     const addTimeBtn = document.getElementById("addTimeBtn");
     const maxPerDayInput = document.getElementById("maxPerDayInput");
 
+
+    // Tomorrow widget refs
+    const tomorrowTitleEl = document.getElementById("tomorrowTitle");
+    const tomorrowCountEl = document.getElementById("tomorrowCount");
+    const tomorrowListEl = document.getElementById("tomorrowList");
+    const downloadTomorrowIcsBtn = document.getElementById("downloadTomorrowIcsBtn");
+
+    function escapeHtml(s) {
+      return String(s)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\"", "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function parseDurationMinutes(s) {
+      if (!s) return 30;
+      const str = String(s).toLowerCase().trim();
+      const hrMatch = str.match(/(\d+(?:\.\d+)?)\s*(hr|hour|h)\b/);
+      const minMatch = str.match(/(\d+)\s*(min|mins|minute|m)\b/);
+      let minutes = 0;
+      if (hrMatch) minutes += Math.round(parseFloat(hrMatch[1]) * 60);
+      if (minMatch) minutes += parseInt(minMatch[1], 10);
+      if (!minutes) minutes = 30;
+      return Math.max(5, Math.min(minutes, 8 * 60));
+    }
+
+    function pad2(n) {
+      return String(n).padStart(2, "0");
+    }
+
+    function toIcsDate(dt) {
+      const y = dt.getFullYear();
+      const m = pad2(dt.getMonth() + 1);
+      const d = pad2(dt.getDate());
+      const hh = pad2(dt.getHours());
+      const mm = pad2(dt.getMinutes());
+      return `${y}${m}${d}T${hh}${mm}00`;
+    }
+
+    function escapeIcsText(s) {
+      return String(s || "")
+        .replace(/\\/g, "\\\\")
+        .replace(/\n/g, "\\n")
+        .replace(/,/g, "\\,")
+        .replace(/;/g, "\\;");
+    }
+
+    function buildTomorrowIcs(bookingsTomorrow) {
+      const now = new Date();
+      const dtstamp = toIcsDate(now);
+      let ics = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//PetSittingDiary//EN\nCALSCALE:GREGORIAN\n";
+      bookingsTomorrow.forEach((b) => {
+        const start = new Date(b.dateTime);
+        const durMin = parseDurationMinutes(b.duration);
+        const end = new Date(start.getTime() + durMin * 60 * 1000);
+        const uid = `psd-${b.id}-${toIcsDate(start)}@pet-sitting-diary`;
+        const summary = `${b.clientName} · ${b.petName} (${b.serviceType || "Booking"})`;
+        const location = b.address || "";
+        const description = b.notes || "";
+        ics += "BEGIN:VEVENT\n";
+        ics += `UID:${escapeIcsText(uid)}\n`;
+        ics += `DTSTAMP:${dtstamp}\n`;
+        ics += `DTSTART:${toIcsDate(start)}\n`;
+        ics += `DTEND:${toIcsDate(end)}\n`;
+        ics += `SUMMARY:${escapeIcsText(summary)}\n`;
+        if (location) ics += `LOCATION:${escapeIcsText(location)}\n`;
+        if (description) ics += `DESCRIPTION:${escapeIcsText(description)}\n`;
+        ics += "END:VEVENT\n";
+      });
+      ics += "END:VCALENDAR\n";
+      return ics;
+    }
+
+    function downloadTextFile(filename, text, mime) {
+      const blob = new Blob([text], { type: mime || "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function renderTomorrow() {
+      const now = new Date();
+      const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      const dateStr = formatDateISO(tomorrow);
+      const list = getBookingsForDate(dateStr);
+
+      const label = tomorrow.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" });
+      tomorrowTitleEl.textContent = `Tomorrow · ${label}`;
+
+      if (list.length === 0) {
+        tomorrowCountEl.textContent = "";
+        tomorrowListEl.innerHTML = `<li class="tomorrow-item"><span>No booking</span><span></span></li>`;
+        downloadTomorrowIcsBtn.disabled = true;
+        return;
+      }
+
+      tomorrowCountEl.textContent = String(list.length);
+      tomorrowListEl.innerHTML = "";
+      list.forEach((b) => {
+        const li = document.createElement("li");
+        li.className = "tomorrow-item";
+        const left = document.createElement("span");
+        left.innerHTML = `<b>${formatTime(b.dateTime)}</b> ${escapeHtml(`${b.clientName} · ${b.petName}`)}`;
+        const right = document.createElement("span");
+        right.textContent = b.address || "";
+        li.appendChild(left);
+        li.appendChild(right);
+        tomorrowListEl.appendChild(li);
+      });
+
+      downloadTomorrowIcsBtn.disabled = false;
+      downloadTomorrowIcsBtn.onclick = () => {
+        const ics = buildTomorrowIcs(list);
+        downloadTextFile(`tomorrow-bookings-${dateStr}.ics`, ics, "text/calendar");
+      };
+    }
+
+
     // Calendar rendering
     function renderCalendar() {
       const { currentYear, currentMonth } = state;
@@ -1109,6 +1291,7 @@
           renderCalendar();
           renderDayDetails();
           hideForm();
+          renderTomorrow();
           alert("已刪除呢個 booking。");
         });
 
@@ -1296,6 +1479,7 @@
       state.selectedDate = null;
       renderCalendar();
       resetDetailsPanel();
+      renderTomorrow();
       hideForm();
     });
 
